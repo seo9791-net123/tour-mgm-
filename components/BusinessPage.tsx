@@ -85,7 +85,7 @@ const BusinessPage: React.FC<Props> = ({ content, onBack }) => {
       <section className="py-20 bg-deepgreen text-white">
          <div className="max-w-7xl mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-8 uppercase">성공적인 비지니스를 위한 파트너</h2>
-            <p className="text-lg opacity-80 mb-10 max-w-3xl mx-auto">TOUR MGM은 베트남 남부 전 지역에서 고객님의 품격을 높여드리는 전문 의전팀을 운영하고 있습니다.</p>
+            <p className="text-lg opacity-80 mb-10 max-w-3xl mx-auto">MANGO TOUR는 베트남 남부 전 지역에서 고객님의 품격을 높여드리는 전문 의전팀을 운영하고 있습니다.</p>
             <button className="bg-gold-500 text-white px-10 py-4 rounded-full font-bold hover:bg-gold-600 transition shadow-xl">실시간 의전 상담하기</button>
          </div>
       </section>

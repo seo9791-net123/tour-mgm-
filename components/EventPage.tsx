@@ -25,7 +25,7 @@ const EventPage: React.FC<Props> = ({ content, onBack, onEventClick, isLoggedIn,
     <div className="min-h-screen bg-[#f8f9fa] text-black font-sans overflow-x-hidden animate-fade-in">
       <div className="fixed top-0 left-0 w-full z-50 p-4 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-sm">
         <button onClick={onBack} className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition text-black">←</button>
-        <span className="font-bold text-deepgreen tracking-tight">TOUR MGM EVENTS</span>
+        <span className="font-bold text-deepgreen tracking-tight">MANGO TOUR EVENTS</span>
         <div className="w-10"></div>
       </div>
 
@@ -82,7 +82,7 @@ const EventPage: React.FC<Props> = ({ content, onBack, onEventClick, isLoggedIn,
       <section className="py-20 bg-white">
          <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6 text-gray-800">이벤트 소식을 가장 먼저 받아보세요</h2>
-            <p className="text-gray-500 mb-10 text-lg">TOUR MGM 플러스 친구 추가 시 매월 업데이트되는 대회 정보와 할인 쿠폰을 발송해 드립니다.</p>
+            <p className="text-gray-500 mb-10 text-lg">MANGO TOUR 플러스 친구 추가 시 매월 업데이트되는 대회 정보와 할인 쿠폰을 발송해 드립니다.</p>
             <button className="bg-yellow-400 text-black px-12 py-4 rounded-full font-bold hover:bg-yellow-500 transition shadow-xl flex items-center gap-3 mx-auto transform active:scale-95">
                <span className="bg-black text-white px-2 py-0.5 rounded font-black text-sm">Talk</span> 
                <span>카카오톡 친구 추가하기</span>
