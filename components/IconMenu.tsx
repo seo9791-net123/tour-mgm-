@@ -13,36 +13,39 @@ interface Props {
 
 const IconMenu: React.FC<Props> = ({ items, onItemClick }) => {
   return (
-    <div className="py-12 bg-white max-w-7xl mx-auto px-4">
-      <div className="grid grid-cols-4 md:grid-cols-8 gap-6 md:gap-8">
+    <div className="py-10 bg-white max-w-7xl mx-auto px-4">
+      <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 md:gap-6">
         {items.map((item, index) => (
           <div
             key={index}
             onClick={() => onItemClick && onItemClick(item.label)}
-            className="group flex flex-col items-center gap-3 cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+            className="group flex flex-col items-center gap-2 cursor-pointer transition-all duration-300"
           >
-            {/* 3D Icon Container with Enhanced Glassmorphism */}
-            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-gradient-to-br from-gray-50 to-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] flex items-center justify-center border border-white group-hover:shadow-[0_20px_40px_rgba(197,160,40,0.2)] group-hover:border-gold-200 transition-all duration-500 overflow-hidden">
-               {/* Decorative background glow */}
-               <div className="absolute inset-0 bg-gradient-to-tr from-gold-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {/* Premium Icon Container */}
+            <div className="relative w-full aspect-square rounded-3xl bg-gradient-to-br from-white to-gray-50 shadow-[0_8px_20px_rgba(0,0,0,0.04)] flex items-center justify-center border border-gray-100 group-hover:shadow-[0_15px_30px_rgba(197,160,40,0.15)] group-hover:border-gold-300 transition-all duration-500 overflow-hidden">
                
-               {/* Icon Image - Increased size to match "Video" icon prominence */}
-               <img 
-                 src={item.icon} 
-                 alt={item.label}
-                 className="w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ease-out z-10"
-                 onError={(e) => {
-                   (e.target as HTMLImageElement).style.display = 'none';
-                   (e.target as HTMLImageElement).parentElement!.innerText = item.icon;
-                 }}
-               />
+               {/* Background Layer for Shine */}
+               <div className="absolute inset-0 bg-gradient-to-tr from-gold-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                
-               {/* High-end Shine effect */}
-               <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-[-25deg] group-hover:animate-[shine_0.8s_ease-in-out]"></div>
+               {/* Icon Image - Adjusted for "Fit to box" */}
+               <div className="w-full h-full p-4 md:p-5 flex items-center justify-center z-10">
+                  <img 
+                    src={item.icon} 
+                    alt={item.label}
+                    className="w-full h-full object-contain drop-shadow-md transform group-hover:scale-110 group-hover:-rotate-2 transition-all duration-500 ease-out"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://cdn-icons-png.flaticon.com/512/8212/8212613.png'; // Fallback
+                    }}
+                  />
+               </div>
+               
+               {/* High-end Flash/Shine effect */}
+               <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/70 to-transparent skew-x-[-25deg] group-hover:animate-[shine_0.7s_ease-in-out]"></div>
             </div>
             
-            {/* Label - Bolder and clearer */}
-            <span className="text-[11px] md:text-[13px] font-bold text-gray-600 group-hover:text-deepgreen tracking-tight transition-colors duration-300 text-center leading-tight">
+            {/* Label */}
+            <span className="text-[11px] md:text-[12px] font-bold text-gray-500 group-hover:text-deepgreen tracking-tight transition-colors duration-300 text-center mt-1">
               {item.label}
             </span>
           </div>

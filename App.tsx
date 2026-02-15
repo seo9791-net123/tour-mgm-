@@ -19,6 +19,7 @@ import TourPage from './components/TourPage';
 import EventPage from './components/EventPage';
 import { INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_POSTS, HERO_IMAGES, SUB_MENU_ITEMS, INITIAL_PAGE_CONTENTS } from './constants';
 import { User, Product, VideoItem, CommunityPost, TripPlanResult, PageContent, MenuItem } from './types';
+import { storageService } from './services/storageService';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -32,55 +33,76 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'admin' | 'category'>('home');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Lifted Content State
-  const [heroImages, setHeroImages] = useState<string[]>(() => {
-    const saved = localStorage.getItem('tour_mgm_hero_images_v3');
-    return saved ? JSON.parse(saved) : HERO_IMAGES;
-  });
+  // Lifted Content State - Initial state uses constants, then updated via effect
+  const [heroImages, setHeroImages] = useState<string[]>(HERO_IMAGES);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(SUB_MENU_ITEMS);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [videos, setVideos] = useState<VideoItem[]>(INITIAL_VIDEOS);
+  const [posts, setPosts] = useState<CommunityPost[]>(INITIAL_POSTS);
+  const [pageContents, setPageContents] = useState<Record<string, PageContent>>(INITIAL_PAGE_CONTENTS);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
-    const saved = localStorage.getItem('tour_mgm_menu_items_v3');
-    return saved ? JSON.parse(saved) : SUB_MENU_ITEMS;
-  });
-  
-  const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('tour_mgm_products_v3');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
-  });
+  const STORAGE_KEYS = [
+    'tour_mgm_hero_images_v3',
+    'tour_mgm_menu_items_v3',
+    'tour_mgm_products_v3',
+    'tour_mgm_videos_v3',
+    'tour_mgm_posts_v3',
+    'tour_mgm_pages_v3'
+  ];
 
-  const [videos, setVideos] = useState<VideoItem[]>(() => {
-    const saved = localStorage.getItem('tour_mgm_videos_v3');
-    return saved ? JSON.parse(saved) : INITIAL_VIDEOS;
-  });
+  // 1. Load Data and Migrate on Mount
+  useEffect(() => {
+    const initStorage = async () => {
+      // First, attempt to migrate old localStorage data to IndexedDB
+      await storageService.migrateFromLocalStorage(STORAGE_KEYS);
 
-  const [posts, setPosts] = useState<CommunityPost[]>(() => {
-    const saved = localStorage.getItem('tour_mgm_posts_v3');
-    return saved ? JSON.parse(saved) : INITIAL_POSTS;
-  });
+      // Then load from IndexedDB
+      const h = await storageService.getItem<string[]>(STORAGE_KEYS[0]);
+      const m = await storageService.getItem<MenuItem[]>(STORAGE_KEYS[1]);
+      const pr = await storageService.getItem<Product[]>(STORAGE_KEYS[2]);
+      const v = await storageService.getItem<VideoItem[]>(STORAGE_KEYS[3]);
+      const po = await storageService.getItem<CommunityPost[]>(STORAGE_KEYS[4]);
+      const pa = await storageService.getItem<Record<string, PageContent>>(STORAGE_KEYS[5]);
 
-  const [pageContents, setPageContents] = useState<Record<string, PageContent>>(() => {
-    const saved = localStorage.getItem('tour_mgm_pages_v3');
-    return saved ? JSON.parse(saved) : INITIAL_PAGE_CONTENTS;
-  });
-  
-  // Safe Storage Utility to prevent QuotaExceededError crashes
-  const safeSave = (key: string, value: any) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) {
-      if (e instanceof DOMException && e.name === 'QuotaExceededError') {
-        alert('저장 공간이 가득 찼습니다. 너무 큰 이미지 파일은 피해주시기 바랍니다.');
-      }
-      console.error('Storage Error:', e);
-    }
-  };
+      if (h) setHeroImages(h);
+      if (m) setMenuItems(m);
+      if (pr) setProducts(pr);
+      if (v) setVideos(v);
+      if (po) setPosts(po);
+      if (pa) setPageContents(pa);
 
-  useEffect(() => safeSave('tour_mgm_hero_images_v3', heroImages), [heroImages]);
-  useEffect(() => safeSave('tour_mgm_menu_items_v3', menuItems), [menuItems]);
-  useEffect(() => safeSave('tour_mgm_products_v3', products), [products]);
-  useEffect(() => safeSave('tour_mgm_videos_v3', videos), [videos]);
-  useEffect(() => safeSave('tour_mgm_posts_v3', posts), [posts]);
-  useEffect(() => safeSave('tour_mgm_pages_v3', pageContents), [pageContents]);
+      setIsDataLoaded(true);
+    };
+
+    initStorage();
+  }, []);
+
+  // 2. Synchronize State to Storage (Debounced or on Change)
+  // To optimize, we only save when data has actually been loaded from DB first
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[0], heroImages);
+  }, [heroImages, isDataLoaded]);
+
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[1], menuItems);
+  }, [menuItems, isDataLoaded]);
+
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[2], products);
+  }, [products, isDataLoaded]);
+
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[3], videos);
+  }, [videos, isDataLoaded]);
+
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[4], posts);
+  }, [posts, isDataLoaded]);
+
+  useEffect(() => {
+    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[5], pageContents);
+  }, [pageContents, isDataLoaded]);
 
   const [users, setUsers] = useState<User[]>([
     { id: 'admin', username: 'admin', role: 'admin', nickname: '관리자' },
@@ -159,6 +181,16 @@ const App: React.FC = () => {
   };
 
   const isAdmin = user?.role === 'admin';
+
+  if (!isDataLoaded) {
+    return (
+      <div className="min-h-screen bg-deepgreen flex flex-col items-center justify-center text-white p-8">
+        <div className="w-16 h-16 border-4 border-gold-400 border-t-transparent rounded-full animate-spin mb-6"></div>
+        <h2 className="text-xl font-bold mb-2">데이터를 안전하게 불러오는 중입니다</h2>
+        <p className="text-sm opacity-60">잠시만 기다려 주세요...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
