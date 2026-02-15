@@ -31,7 +31,6 @@ const AdminDashboard: React.FC<Props> = ({
   const [activeTab, setActiveTab] = useState<'users' | 'hero' | 'products' | 'pages' | 'menu'>('users');
   
   // States for Hero Management
-  const [newImageUrl, setNewImageUrl] = useState('');
   const heroFileInputRef = useRef<HTMLInputElement>(null);
 
   // States for Product Management

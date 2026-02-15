@@ -98,11 +98,11 @@ ${inquiryText || '(내용 없음)'}
                       <>
                         <tr className="border-b">
                           <td className="py-3 font-bold w-32 text-gray-600 bg-gray-50 pl-2">상품명</td>
-                          <td className="py-3 pl-4">{product.title}</td>
+                          <td className="py-3 pl-4">{title}</td>
                         </tr>
                         <tr className="border-b">
                           <td className="py-3 font-bold text-gray-600 bg-gray-50 pl-2">지역/일정</td>
-                          <td className="py-3 pl-4">{product.location} / {product.duration}</td>
+                          <td className="py-3 pl-4">{location} / {duration}</td>
                         </tr>
                         <tr className="border-b">
                           <td className="py-3 font-bold text-gray-600 bg-gray-50 pl-2">포함사항</td>
