@@ -27,7 +27,7 @@ const QuotationModal: React.FC<Props> = ({ product, plan, onClose }) => {
   };
 
   const handleCopyText = async () => {
-     const textToCopy = `[MANGO TOUR 여행 견적 문의]
+     const textToCopy = `[TOUR MGM 여행 견적 문의]
 📅 문의 일자: ${new Date().toLocaleDateString()}
 
 ${product ? `📌 상품명: ${product.title}
@@ -63,7 +63,7 @@ ${inquiryText || '(내용 없음)'}
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-2xl font-bold mb-1 tracking-wider">견적서 (QUOTATION)</h2>
-              <p className="text-sm opacity-80 font-light">MANGO TOUR TRAVEL AGENCY</p>
+              <p className="text-sm opacity-80 font-light">TOUR MGM TRAVEL AGENCY</p>
             </div>
             <button onClick={onClose} className="text-white hover:text-gold-400 transition text-2xl font-bold no-print">✕</button>
           </div>
@@ -78,10 +78,10 @@ ${inquiryText || '(내용 없음)'}
               <div className="text-sm text-gray-600 space-y-1">
                 <p><strong className="text-black">수신:</strong> 고객님 귀하</p>
                 <p><strong className="text-black">날짜:</strong> {new Date().toLocaleDateString()}</p>
-                <p><strong className="text-black">발행:</strong> MANGO TOUR</p>
+                <p><strong className="text-black">발행:</strong> TOUR MGM</p>
               </div>
               <div className="text-right">
-                <div className="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center text-white font-bold text-2xl ml-auto mb-2 shadow-sm print:bg-gold-500 print:text-white print:print-color-adjust-exact">M</div>
+                <div className="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center text-white font-bold text-2xl ml-auto mb-2 shadow-sm print:bg-gold-500 print:text-white print:print-color-adjust-exact">T</div>
               </div>
             </div>
 
@@ -174,7 +174,7 @@ ${inquiryText || '(내용 없음)'}
               )}
             </div>
 
-            {/* Cost Breakdown (Only for AI Plan) */}
+            {/* Cost Breakdown */}
             {plan && (
               <div className="mb-8 break-inside-avoid">
                 <p className="font-bold mb-4 text-deepgreen text-lg border-b pb-2">포함 내역 상세</p>
@@ -211,17 +211,16 @@ ${inquiryText || '(내용 없음)'}
 
             {/* Footer Terms */}
             <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500 text-center leading-relaxed">
-              <p>※ MANGO TOUR : 59 LE VAN THIEM PMH Q7. HOCHIMINH</p>
+              <p>※ TOUR MGM : 59 LE VAN THIEM PMH Q7. HOCHIMINH</p>
               <p>Contact: +84 77 803 8743</p>
             </div>
             
             {/* Stamp Effect */}
             <div className="absolute bottom-10 right-10 opacity-20 pointer-events-none transform rotate-[-15deg] print:opacity-50">
                <div className="border-4 border-red-800 rounded-full w-32 h-32 flex items-center justify-center">
-                 <span className="text-red-800 font-bold text-xl text-center">MANGO TOUR<br/>OFFICIAL</span>
+                 <span className="text-red-800 font-bold text-xl text-center">TOUR MGM<br/>OFFICIAL</span>
                </div>
             </div>
-
           </div>
         </div>
 
@@ -259,7 +258,6 @@ ${inquiryText || '(내용 없음)'}
                   </p>
                 </div>
                 
-                {/* Contact Info */}
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center p-3 bg-yellow-100 rounded-xl border border-yellow-200 shadow-sm">
                     <div className="bg-yellow-400 p-1.5 rounded-lg mr-3">
@@ -270,18 +268,8 @@ ${inquiryText || '(내용 없음)'}
                       <p className="text-base font-bold text-gray-800">vnseen1</p>
                     </div>
                   </div>
-                  <div className="flex items-center p-3 bg-green-50 rounded-xl border border-green-200 shadow-sm">
-                    <div className="bg-green-600 p-1.5 rounded-lg mr-3 text-white">
-                      <span className="text-lg">📞</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[10px] text-gray-600 font-bold">베트남 연락처</p>
-                      <p className="text-base font-bold text-gray-800">077 803 8743</p>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Inquiry Input Area */}
                 <div className="mb-4">
                   <label className="block text-xs font-bold text-gray-600 mb-2">✍️ 추가 문의사항 (선택)</label>
                   <textarea 
@@ -292,7 +280,6 @@ ${inquiryText || '(내용 없음)'}
                   />
                 </div>
 
-                {/* Action Buttons */}
                 <div className="space-y-3">
                    <button 
                     onClick={handleCopyText}
@@ -304,21 +291,11 @@ ${inquiryText || '(내용 없음)'}
                         <div className="text-[10px] opacity-80 font-normal">복사 후 카톡 채팅방에 붙여넣기 하세요</div>
                     </div>
                   </button>
-
-                   <button 
-                    onClick={handlePrintPDF}
-                    className="w-full py-3 px-4 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 flex items-center justify-center gap-2 border border-gray-200"
-                  >
-                    <span className="text-lg">🖨️</span> 
-                    <span className="text-sm">PDF 파일로 저장하기</span>
-                  </button>
                 </div>
-                
               </div>
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

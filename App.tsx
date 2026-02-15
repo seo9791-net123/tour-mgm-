@@ -33,7 +33,7 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'admin' | 'category'>('home');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Lifted Content State - Initial state uses constants, then updated via effect
+  // Lifted Content State
   const [heroImages, setHeroImages] = useState<string[]>(HERO_IMAGES);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(SUB_MENU_ITEMS);
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
@@ -51,13 +51,9 @@ const App: React.FC = () => {
     'tour_mgm_pages_v3'
   ];
 
-  // 1. Load Data and Migrate on Mount
   useEffect(() => {
     const initStorage = async () => {
-      // First, attempt to migrate old localStorage data to IndexedDB
       await storageService.migrateFromLocalStorage(STORAGE_KEYS);
-
-      // Then load from IndexedDB
       const h = await storageService.getItem<string[]>(STORAGE_KEYS[0]);
       const m = await storageService.getItem<MenuItem[]>(STORAGE_KEYS[1]);
       const pr = await storageService.getItem<Product[]>(STORAGE_KEYS[2]);
@@ -74,35 +70,15 @@ const App: React.FC = () => {
 
       setIsDataLoaded(true);
     };
-
     initStorage();
   }, []);
 
-  // 2. Synchronize State to Storage (Debounced or on Change)
-  // To optimize, we only save when data has actually been loaded from DB first
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[0], heroImages);
-  }, [heroImages, isDataLoaded]);
-
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[1], menuItems);
-  }, [menuItems, isDataLoaded]);
-
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[2], products);
-  }, [products, isDataLoaded]);
-
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[3], videos);
-  }, [videos, isDataLoaded]);
-
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[4], posts);
-  }, [posts, isDataLoaded]);
-
-  useEffect(() => {
-    if (isDataLoaded) storageService.setItem(STORAGE_KEYS[5], pageContents);
-  }, [pageContents, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[0], heroImages); }, [heroImages, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[1], menuItems); }, [menuItems, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[2], products); }, [products, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[3], videos); }, [videos, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[4], posts); }, [posts, isDataLoaded]);
+  useEffect(() => { if (isDataLoaded) storageService.setItem(STORAGE_KEYS[5], pageContents); }, [pageContents, isDataLoaded]);
 
   const [users, setUsers] = useState<User[]>([
     { id: 'admin', username: 'admin', role: 'admin', nickname: '관리자' },
@@ -122,14 +98,8 @@ const App: React.FC = () => {
       resetAuthFields();
     } else {
        if (authMode === 'signup') {
-         if (!username.trim() || !password.trim()) {
-           alert('아이디와 비밀번호를 입력해주세요.');
-           return;
-         }
-         if (!nickname.trim()) {
-           alert('닉네임을 입력해주세요.');
-           return;
-         }
+         if (!username.trim() || !password.trim()) { alert('아이디와 비밀번호를 입력해주세요.'); return; }
+         if (!nickname.trim()) { alert('닉네임을 입력해주세요.'); return; }
          const newUser: User = { id: Date.now().toString(), username, role: 'user', nickname };
          setUsers([...users, newUser]);
          setUser(newUser);
@@ -149,22 +119,12 @@ const App: React.FC = () => {
     }
   };
 
-  const resetAuthFields = () => {
-    setUsername('');
-    setPassword('');
-    setNickname('');
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setCurrentPage('home');
-  };
-
+  const resetAuthFields = () => { setUsername(''); setPassword(''); setNickname(''); };
+  const handleLogout = () => { setUser(null); setCurrentPage('home'); };
   const handleProductClick = (id: string) => {
     const product = products.find(p => p.id === id);
     if (product) setSelectedProduct(product);
   };
-
   const handleMenuClick = (label: string) => {
     setSelectedCategory(label);
     setCurrentPage('category');
@@ -197,8 +157,8 @@ const App: React.FC = () => {
       <header className="sticky top-0 z-40 bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
           <button onClick={() => setCurrentPage('home')} className="flex items-center gap-2">
-             <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center text-white font-bold text-xs">M</div>
-             <h1 className="text-lg font-bold text-deepgreen tracking-tight">MANGO TOUR</h1>
+             <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center text-white font-bold text-xs">T</div>
+             <h1 className="text-lg font-bold text-deepgreen tracking-tight uppercase">TOUR MGM</h1>
           </button>
           
           <nav className="flex gap-2 items-center">
@@ -289,8 +249,8 @@ const App: React.FC = () => {
       </main>
 
       <footer className="bg-gray-800 text-gray-400 py-6 text-center text-xs">
-         <p>MANGO TOUR TRAVEL AGENCY | +84 77 803 8743 | Kakao: vnseen1</p>
-         <p className="mt-1">© MANGO TOUR. All rights reserved.</p>
+         <p>TOUR MGM TRAVEL AGENCY | +84 77 803 8743 | Kakao: vnseen1</p>
+         <p className="mt-1">© TOUR MGM. All rights reserved.</p>
       </footer>
 
       <ChatRoom user={user} onReqLogin={() => { setShowAuthModal(true); setAuthMode('login'); }} />
@@ -323,7 +283,6 @@ const App: React.FC = () => {
                 {authMode === 'login' ? '로그인' : '가입 완료하기'}
               </button>
             </form>
-
             <div className="mt-8 text-center border-t pt-6">
               {authMode === 'login' ? (
                 <p className="text-sm text-gray-500">
